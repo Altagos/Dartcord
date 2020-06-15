@@ -2,7 +2,7 @@ import 'WebSocket.dart';
 
 class Client {
   WebSocket _ws;
-  String _token;
+  final String _token;
 
   WebSocket get ws => _ws;
 
