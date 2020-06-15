@@ -1,24 +1,15 @@
 import 'package:Dartcord/Dartcord.dart';
-import 'package:dotenv/dotenv.dart';
+import 'package:dotenv/dotenv.dart' show load, env;
+
+import 'events/onEvent.dart';
+import 'events/onMessage.dart';
+import 'events/onReady.dart';
 
 void main() async {
   load();
   var awesome = Client(env['BOT_TOKEN']);
-
-  onEvent(awesome);
-  onMessage(awesome);
+  awesome.eventHandlers(
+      onReady: onReady, onMessage: onMessage, onEvent: onEvent);
 
   awesome.run();
-}
-
-void onEvent(Client awesome) async {
-  await for (Event event in awesome.events) {
-    print('Event: ${event.eventName}');
-  }
-}
-
-void onMessage(Client awesome) async {
-  await for (Message msg in awesome.messages) {
-    print('Message: ${msg.authorName} - ${msg.content}');
-  }
 }

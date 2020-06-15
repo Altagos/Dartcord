@@ -10,4 +10,7 @@ export 'src/Models/Event.dart';
 export 'src/Models/Message.dart';
 export 'src/Models/Payload.dart';
 
+// Events
+export 'src/Events/ready.dart';
+
 // TODO: Export any libraries intended for clients of this package.

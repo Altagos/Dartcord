@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:Dartcord/src/Constants/Constants.dart';
+import 'package:Dartcord/src/Constants/Events.dart';
 //import 'package:Dartcord/src/Constants/Events.dart';
 import 'package:Dartcord/src/Models/Event.dart';
 import 'package:Dartcord/src/Models/Message.dart';
@@ -37,11 +38,13 @@ class WebSocket {
           }
           var event = payload.t.toLowerCase();
           switch (event) {
-            case 'message_create':
+            case Events.messageCreate:
               _messageController.sink.add(Message.fromJson(payload.d));
+              _controller.sink
+                  .add(Event(event, payload, Message.fromJson(payload.d)));
               break;
             default:
-              _controller.sink.add(Event(event, payload));
+              _controller.sink.add(Event(event, payload, null));
           }
           break;
         case OpCodes.TEN:
@@ -57,10 +60,8 @@ class WebSocket {
   void heartbeat(int heartbeat) async {
     await Timer.periodic(Duration(milliseconds: heartbeat), (timer) {
       if (!_connected) {
-        print(
+        throw Exception(
             '[WebSocket] Connecting failed\n[WebSocket] Please check you bot token!');
-        _ws.sink.close();
-        exit(500);
       } else {
         _ws.sink.add(Payload.heartbeat);
       }
