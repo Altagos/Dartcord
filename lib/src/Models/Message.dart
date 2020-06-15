@@ -4,6 +4,7 @@ class Message {
   int _channelId;
   int _guildId;
   int _authorId; // TODO: replace with user/author
+  String _authorName;
 
   // RestAPIHandler _rest;
 
@@ -15,6 +16,7 @@ class Message {
     _channelId = int.tryParse(json['channel_id']);
     _guildId = int.tryParse(json['guild_id']);
     _authorId = int.tryParse(json['author']['id']);
+    _authorName = json['author']['username'];
   }
 
   int get id => _id;
@@ -22,6 +24,7 @@ class Message {
   int get channelId => _channelId;
   int get guildId => _guildId;
   int get authorId => _authorId;
+  String get authorName => _authorName;
 
   // reply({String content}) async {
   //   var message = '<@$_authorId>, $content';

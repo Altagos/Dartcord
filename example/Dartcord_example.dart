@@ -1,7 +1,7 @@
 import 'package:Dartcord/Dartcord.dart';
 import 'package:dotenv/dotenv.dart';
 
-void main() {
+void main() async {
   load();
   var awesome = Client(env['BOT_TOKEN']);
 
@@ -11,14 +11,14 @@ void main() {
   awesome.run();
 }
 
-void onEvent(Client awesome) {
-  awesome.ws.events.listen((Event event) {
+void onEvent(Client awesome) async {
+  await for (Event event in awesome.events) {
     print('Event: ${event.eventName}');
-  });
+  }
 }
 
-void onMessage(Client awesome) {
-  awesome.ws.messages.listen((Message msg) {
-    print('Message: ${msg.content}');
-  });
+void onMessage(Client awesome) async {
+  await for (Message msg in awesome.messages) {
+    print('Message: ${msg.authorName} - ${msg.content}');
+  }
 }
