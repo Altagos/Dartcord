@@ -3,6 +3,6 @@
 /// More dartdocs go here.
 library Dartcord;
 
-export 'src/Dartcord_base.dart';
+export 'src/Client/Client.dart';
 
 // TODO: Export any libraries intended for clients of this package.
