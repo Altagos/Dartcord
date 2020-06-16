@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:Dartcord/src/Constants/Constants.dart';
 import 'package:Dartcord/src/Constants/Events.dart';
@@ -9,17 +8,17 @@ import 'package:Dartcord/src/Models/Message.dart';
 import 'package:Dartcord/src/Models/Payload.dart';
 import 'package:web_socket_channel/io.dart';
 
+import '../../Dartcord.dart';
+
 class WebSocket {
   IOWebSocketChannel _ws;
-  final String _token;
+  final Client _client;
   bool _connected = false;
   final _controller = StreamController<Event>.broadcast();
-  final _messageController = StreamController<Message>.broadcast();
 
   Stream<Event> get events => _controller.stream;
-  Stream<Message> get messages => _messageController.stream;
 
-  WebSocket(this._token);
+  WebSocket(this._client);
 
   void connect() async {
     _ws = await IOWebSocketChannel.connect(GATEWAY);
@@ -39,20 +38,21 @@ class WebSocket {
           var event = payload.t.toLowerCase();
           switch (event) {
             case Events.messageCreate:
-              _messageController.sink.add(Message.fromJson(payload.d));
               _controller.sink
-                  .add(Event(event, payload, Message.fromJson(payload.d)));
+                  .add(Event(event, payload, Message.fromMap(payload.d)));
               break;
             default:
               _controller.sink.add(Event(event, payload, null));
           }
           break;
         case OpCodes.TEN:
-          await _ws.sink.add(Payload.identify(_token));
+          await _ws.sink.add(Payload.identify(_client.token));
           await heartbeat(payload.d['heartbeat_interval']);
           break;
         case OpCodes.ELEVEN:
           break;
+        default:
+          print(payload);
       }
     });
   }

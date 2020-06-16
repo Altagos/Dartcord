@@ -1,38 +1,126 @@
+import 'dart:convert';
+
+import 'User.dart';
+
 class Message {
-  int _id;
-  String _content;
-  int _channelId;
-  int _guildId;
-  int _authorId; // TODO: replace with user/author
-  String _authorName;
-
-  // RestAPIHandler _rest;
-
-  Message(this._id, this._content, this._channelId, this._guildId);
-
-  Message.fromJson(Map<String, dynamic> json) {
-    _id = int.tryParse(json['id']);
-    _content = json['content'];
-    _channelId = int.tryParse(json['channel_id']);
-    _guildId = int.tryParse(json['guild_id']);
-    _authorId = int.tryParse(json['author']['id']);
-    _authorName = json['author']['username'];
-  }
+  final int _id;
+  final int _channelId;
+  final int _guildId;
+  final User _author;
+  final _member;
+  final String _content;
+  final DateTime _timestamp;
+  final DateTime _editedTimestamp;
+  final bool _tts;
+  final bool _mentionEveryone;
+  final List<User> _mentions;
+  final List<int> _mentionRoles;
+  final _attachments;
+  final _embeds;
+  final _reactions;
+  final _nonce;
+  final bool _pinned;
+  final int _webhookId;
+  final int _type;
+  final int _flags;
 
   int get id => _id;
-  String get content => _content;
   int get channelId => _channelId;
   int get guildId => _guildId;
-  int get authorId => _authorId;
-  String get authorName => _authorName;
+  User get author => _author;
+  dynamic get member => _member;
+  String get content => _content;
+  DateTime get timestamp => _timestamp;
+  DateTime get editedTimestamp => _editedTimestamp;
+  bool get tts => _tts;
+  bool get mentionEveryone => _mentionEveryone;
+  List get mentions => _mentions;
+  List get mentionRoles => _mentionRoles;
+  dynamic get attachments => _attachments;
+  dynamic get embeds => _embeds;
+  dynamic get reactions => _reactions;
+  dynamic get nonce => _nonce;
+  bool get pinned => _pinned;
+  int get webhookId => _webhookId;
+  int get type => _type;
+  int get flags => _flags;
 
-  // reply({String content}) async {
-  //   var message = '<@$_authorId>, $content';
-  //   await _rest.sendMessage(channelId, message);
-  // }
+  Message(
+      this._id,
+      this._channelId,
+      this._guildId,
+      this._author,
+      this._member,
+      this._content,
+      this._timestamp,
+      this._editedTimestamp,
+      this._tts,
+      this._mentionEveryone,
+      this._mentions,
+      this._mentionRoles,
+      this._attachments,
+      this._embeds,
+      this._reactions,
+      this._nonce,
+      this._pinned,
+      this._webhookId,
+      this._type,
+      this._flags);
 
-  @override
-  String toString() {
-    return _content;
+  Map<String, dynamic> toMap() {
+    return {
+      'id': _id,
+      'channel_id': _channelId,
+      'guild_id': _guildId,
+      'author': _author?.toMap(),
+      'member': _member?.toMap(),
+      'content': _content,
+      'timestamp': _timestamp?.millisecondsSinceEpoch,
+      'edited_timestamp': _editedTimestamp?.millisecondsSinceEpoch,
+      'tts': _tts,
+      'mention_everyone': _mentionEveryone,
+      'mentions': _mentions?.map((x) => x?.toMap())?.toList(),
+      'mention_roles': _mentionRoles,
+      'attachments': _attachments?.toMap(),
+      'embeds': _embeds?.toMap(),
+      'reactions': _reactions?.toMap(),
+      'nonce': _nonce?.toMap(),
+      'pinned': _pinned,
+      'webhook_id': _webhookId,
+      'type': _type,
+      'flags': _flags,
+    };
   }
+
+  static Message fromMap(Map<String, dynamic> map) {
+    if (map == null) return null;
+
+    return Message(
+        int.tryParse(map['id']),
+        int.tryParse(map['channel_id']),
+        int.tryParse(map['guild_id']),
+        User.fromMap(map['author']),
+        map['member'],
+        map['content'],
+        DateTime.parse(map['timestamp']),
+        map['edited_timestamp'] != null
+            ? DateTime.parse(map['edited_timestamp'])
+            : null,
+        map['tts'],
+        map['mention_everyone'],
+        List<User>.from(map['mentions']?.map((x) => User.fromMap(x))),
+        List<int>.from(map['mention_roles']),
+        map['attachments'],
+        map['embeds'],
+        map['reactions'],
+        map['nonce'],
+        map['pinned'],
+        map['webhookId'] != null ? int.tryParse(map['webhookId']) : null,
+        map['type'],
+        map['flags']);
+  }
+
+  String toJson() => json.encode(toMap());
+
+  static Message fromJson(String source) => fromMap(json.decode(source));
 }
