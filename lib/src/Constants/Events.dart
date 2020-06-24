@@ -1,3 +1,5 @@
+part of dartcord;
+
 class Events {
   static const hello = 'hello';
   static const ready = 'ready';

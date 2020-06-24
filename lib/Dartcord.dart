@@ -3,14 +3,29 @@
 /// More dartdocs go here.
 library dartcord;
 
-export 'src/Client/Client.dart';
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:web_socket_channel/io.dart';
+
+part 'src/Client/Client.dart';
+part 'src/Client/WebSocket.dart';
+
+part 'src/Constants/Events.dart';
+part 'src/Constants/Constants.dart';
 
 // Models
-export 'src/Models/Event.dart';
-export 'src/Models/Message.dart';
-export 'src/Models/Payload.dart';
+part 'src/Models/Message.dart';
+part 'src/Models/Payload.dart';
+part 'src/Models/User.dart';
 
 // Events
-export 'src/Events/ready.dart';
+part 'src/Events/EventHandler.dart';
+part 'src/Events/Event.dart';
+// Handlers
+part 'src/Events/handlers/ReadyEvent.dart';
+part 'src/Events/handlers/MessageCreateEvent.dart';
 
+// Util
+part 'src/Util/Util.dart';
 // TODO: Export any libraries intended for clients of this package.

@@ -1,22 +1,9 @@
-import 'dart:async';
-
-import 'package:Dartcord/src/Constants/Constants.dart';
-import 'package:Dartcord/src/Constants/Events.dart';
-//import 'package:Dartcord/src/Constants/Events.dart';
-import 'package:Dartcord/src/Models/Event.dart';
-import 'package:Dartcord/src/Models/Message.dart';
-import 'package:Dartcord/src/Models/Payload.dart';
-import 'package:web_socket_channel/io.dart';
-
-import '../../Dartcord.dart';
+part of dartcord;
 
 class WebSocket {
   IOWebSocketChannel _ws;
   final Client _client;
   bool _connected = false;
-  final _controller = StreamController<Event>.broadcast();
-
-  Stream<Event> get events => _controller.stream;
 
   WebSocket(this._client);
 
@@ -37,12 +24,14 @@ class WebSocket {
           }
           var event = payload.t.toLowerCase();
           switch (event) {
+            case Events.ready:
+              _client.fire(ReadyEvent());
+              break;
             case Events.messageCreate:
-              _controller.sink
-                  .add(Event(event, payload, Message.fromMap(payload.d)));
+              _client.fire(MessageCreateEvent(Message.fromMap(payload.d)));
               break;
             default:
-              _controller.sink.add(Event(event, payload, null));
+              _client.fire(Event(event));
           }
           break;
         case OpCodes.TEN:

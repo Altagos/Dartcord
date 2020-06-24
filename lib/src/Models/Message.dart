@@ -1,6 +1,4 @@
-import 'dart:convert';
-
-import 'User.dart';
+part of dartcord;
 
 class Message {
   final int _id;

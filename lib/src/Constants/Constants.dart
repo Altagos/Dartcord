@@ -1,3 +1,5 @@
+part of dartcord;
+
 const String GATEWAY = 'wss://gateway.discord.gg/?v=6&encoding=json';
 const String API = 'https://discord.com/api/v6';
 

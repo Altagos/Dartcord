@@ -1,4 +1,4 @@
-import 'dart:convert';
+part of dartcord;
 
 class Payload {
   var d;
