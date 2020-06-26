@@ -2,17 +2,31 @@ import 'dart:math';
 
 import 'package:Dartcord/Dartcord.dart';
 import 'package:dotenv/dotenv.dart' show load, env;
+import 'package:logging/logging.dart';
 
 void main() async {
+  Logger.root.level = Level.ALL; // defaults to Level.INFO
+  Logger.root.onRecord.listen((record) {
+    print('${record.level.name}: ${record.time}: ${record.message}');
+  });
+
   load();
+
   var awesome = Client(env['BOT_TOKEN']);
 
-  //awesome.on().listen((event) => print('${event.name}Event was fired'));
-
   awesome.on<ReadyEvent>().listen((_) {
+    awesome.changeStatus(
+      status: StatusType.idle,
+      afk: true,
+      game: Game('Testing the bot library', GameType.Game)
+    );
+
     print('Bot is ready!');
     print('Bot Id: ${awesome.user.id}');
-    print('Guilds (${awesome.guilds}):');
+    print('Guild (${awesome.guilds.length}):');
+    awesome.guilds.forEach((id, guild) {
+      print('- ${guild.name} (ID: $id, Roles: ${guild.roles.length}, Custom Emojis: ${guild.emojis.length})');
+    });
 //    print((2146958847 & 0x008) == 0x008);
   });
 
@@ -25,8 +39,7 @@ void main() async {
       var embed = Embed()
         ..title = 'Pong!'
         ..color = Color.rgb(
-            random.nextInt(255), random.nextInt(255), random.nextInt(255))
-        ..addField(name: 'token', value: awesome.token);
+            random.nextInt(255), random.nextInt(255), random.nextInt(255));
       await event.message.reply(embed: embed);
     }
   });

@@ -1,8 +1,12 @@
 part of dartcord;
 
+void guildCreateEvent(Client client, Payload payload) {
+  var guild = Guild.fromJson(payload.d);
+  client.guilds[guild.id] = guild;
+  client.fire(GuildCreateEvent(client, guild));
+}
+
 class GuildCreateEvent extends Event {
-  GuildCreateEvent(Guild guild, Client client)
-      : super(toCamelCase(Events.guildCreate), client) {
-    client.guilds.set(guild.id, guild);
-  }
+  GuildCreateEvent(Client client, Guild guild)
+      : super(toCamelCase(Events.guildCreate), client);
 }

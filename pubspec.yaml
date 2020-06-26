@@ -10,6 +10,7 @@ dependencies:
   web_socket_channel: ^1.1.0
   http: ^0.12.1
   quiver: ^2.1.3
+  logging:
 
 dev_dependencies:
   dotenv: ^2.0.0

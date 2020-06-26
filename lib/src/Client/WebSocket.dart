@@ -4,16 +4,17 @@ class WebSocket {
   IOWebSocketChannel _ws;
   final Client _client;
   bool _connected = false;
+  final log = Logger('WebSocket');
 
   WebSocket(this._client);
 
   void connect() async {
     _ws = await IOWebSocketChannel.connect(GATEWAY);
-    return await handle();
+    await handle();
   }
 
-  void handle() async {
-    await _ws.stream.listen((message) async {
+   Future<StreamSubscription> handle() async {
+    return await _ws.stream.listen((message) async {
       //print(message);
       var payload = Payload.fromJson(message);
 
@@ -36,20 +37,19 @@ class WebSocket {
               connect();
               break;
             case Events.channelCreate:
-              _client.fire(ChannelCreateEvent(payload, _client));
+              channelCreateEvent(_client, payload);
               break;
             case Events.channelUpdate:
-              _client.fire(ChannelUpdateEvent(payload, _client));
+              channelUpdateEvent(_client, payload);
               break;
             case Events.channelDelete:
-              _client.fire(ChannelDeleteEvent(payload, _client));
+              channelDeleteEvent(_client, payload);
               break;
             case Events.channelPinsUpdate:
-              _client.fire(ChannelPinsUpdateEvent(payload, _client));
+              channelPinsUpdateEvent(_client, payload);
               break;
             case Events.guildCreate:
-              _client
-                  .fire(GuildCreateEvent(Guild.fromJson(payload.d), _client));
+              guildCreateEvent(_client, payload);
               break;
             // case Events.guildUpdate:
             //   break;
@@ -82,8 +82,7 @@ class WebSocket {
             // case Events.inviteDelete:
             //   break;
             case Events.messageCreate:
-              _client.fire(MessageCreateEvent(
-                  _client, Message.fromMap(payload.d, _client)));
+              messageCreateEvent(_client, payload);
               break;
             // case Events.messageUpdate:
             //   break;
@@ -118,15 +117,15 @@ class WebSocket {
         case OpCodes.SEVEN:
           await _ws.sink.close();
           _connected = false;
-          connect();
+          return connect();
           break;
         case OpCodes.NINE:
           await _ws.sink.close();
           _connected = false;
-          connect();
+          return connect();
           break;
         case OpCodes.TEN:
-          await _ws.sink.add(Payload.identify(_client.token));
+          await _ws.sink.add(Payload.identify(_client.token, guild_subscriptions: true));
           await heartbeat(payload.d['heartbeat_interval']);
           break;
         case OpCodes.ELEVEN:
@@ -140,11 +139,22 @@ class WebSocket {
   void heartbeat(int heartbeat) async {
     await Timer.periodic(Duration(milliseconds: heartbeat), (timer) {
       if (!_connected) {
-        throw Exception(
-            '[WebSocket] Connecting failed\n[WebSocket] Please check you bot token!');
+        log.warning('WebSocket connection failed! Please check you bot token.');
+        _ws.sink.close();
+        timer.cancel();
+        return connect();
       } else {
         _ws.sink.add(Payload.heartbeat);
       }
     });
+  }
+
+  void changeStatus({int since = 0, String status = 'online', bool afk = false, Game game}) {
+    _ws.sink.add(Payload.changeStatus(
+      since: since,
+      status: status,
+      afk: afk,
+      game: game
+    ));
   }
 }

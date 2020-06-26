@@ -41,7 +41,35 @@ class Payload {
         'token': token,
         'properties': properties,
         'guild_subscriptions': guild_subscriptions,
+        'presence': {
+          'status': StatusType.online,
+          'since': 0,
+          'afk': false
+        }
       }
     });
+  }
+
+  static dynamic changeStatus({int since = 0, String status = 'online', bool afk = false, Game game}) {
+    if (game != null) {
+      return jsonEncode({
+        'op': 3,
+        'd': {
+          'since': since,
+          'game': game.toMap(),
+          'status': status,
+          'afk': afk
+        }
+      });
+    } else {
+      return jsonEncode({
+        'op': 3,
+        'd': {
+          'since': since,
+          'status': status,
+          'afk': afk
+        }
+      });
+    }
   }
 }

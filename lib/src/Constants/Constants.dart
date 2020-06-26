@@ -64,3 +64,18 @@ class Colors {
   static const luminousVividPink = 16580705;
   static const darkVividPink = 12320855;
 }
+
+
+class GameType {
+  static const Game = 0;
+  static const Streaming = 1;
+  static const Listening = 2;
+}
+
+class StatusType {
+  static const online = 'online';
+  static const dnd = 'dnd';
+  static const idle = 'idle';
+  static const invisible = 'invisible';
+  static const offline = 'offline';
+}

@@ -1,5 +1,9 @@
 part of dartcord;
 
+void messageCreateEvent(Client client, Payload payload) {
+  client.fire(MessageCreateEvent(client, Message.fromMap(payload.d, client)));
+}
+
 class MessageCreateEvent extends Event {
   final Message _message;
 

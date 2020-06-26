@@ -4,7 +4,7 @@ class Client extends EventHandler {
   WebSocket _ws;
   Rest _rest;
   final String _token;
-  MapCache _guilds = MapCache<int, Guild>();
+  Map _guilds = <int, Guild>{};
   bool _cacheGuilds;
   ClientUser _user;
 
@@ -14,7 +14,7 @@ class Client extends EventHandler {
 
   String get token => _token;
 
-  MapCache get guilds => _guilds;
+  Map<int, Guild> get guilds => _guilds;
 
   bool get cacheGuilds => _cacheGuilds;
 
@@ -22,7 +22,7 @@ class Client extends EventHandler {
 
   set user(ClientUser user) => _user = user;
 
-  set guilds(MapCache guilds) => _guilds = guilds;
+  set guilds(Map<int, Guild> guilds) => _guilds = guilds;
 
   Client(this._token, {bool cacheGuilds = true}) {
     _cacheGuilds = cacheGuilds;
@@ -32,5 +32,14 @@ class Client extends EventHandler {
 
   void run() {
     _ws.connect();
+  }
+
+  void changeStatus({int since = 0, String status = 'online', bool afk = false, Game game}) {
+    _ws.changeStatus(
+      since: since,
+      status: status,
+      afk: afk,
+      game: game
+    );
   }
 }

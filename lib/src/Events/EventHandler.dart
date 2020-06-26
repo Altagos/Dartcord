@@ -17,10 +17,6 @@ abstract class EventHandler {
     _streamController.add(event);
   }
 
-  void emit(Event event) {
-    _streamController.add(event);
-  }
-
   void destroy() {
     _streamController.close();
   }
