@@ -22,25 +22,46 @@ class Message {
   final int _type;
   final int _flags;
 
+  final Client _client;
+
   int get id => _id;
+
   int get channelId => _channelId;
+
   int get guildId => _guildId;
+
   User get author => _author;
+
   dynamic get member => _member;
+
   String get content => _content;
+
   DateTime get timestamp => _timestamp;
+
   DateTime get editedTimestamp => _editedTimestamp;
+
   bool get tts => _tts;
+
   bool get mentionEveryone => _mentionEveryone;
+
   List get mentions => _mentions;
+
   List get mentionRoles => _mentionRoles;
+
   dynamic get attachments => _attachments;
+
   dynamic get embeds => _embeds;
+
   dynamic get reactions => _reactions;
+
   dynamic get nonce => _nonce;
+
   bool get pinned => _pinned;
+
   int get webhookId => _webhookId;
+
   int get type => _type;
+
   int get flags => _flags;
 
   Message(
@@ -63,7 +84,13 @@ class Message {
       this._pinned,
       this._webhookId,
       this._type,
-      this._flags);
+      this._flags,
+      this._client);
+
+  Future reply({String content, Embed embed, bool tts = false}) async {
+    return await _client.rest
+        .sendMessage(_channelId, content: content, embed: embed, tts: tts);
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -90,13 +117,13 @@ class Message {
     };
   }
 
-  static Message fromMap(Map<String, dynamic> map) {
+  static Message fromMap(Map<String, dynamic> map, Client client) {
     if (map == null) return null;
 
     return Message(
         int.tryParse(map['id']),
         int.tryParse(map['channel_id']),
-        int.tryParse(map['guild_id']),
+        map['guild_id'] != null ? int.tryParse(map['guild_id']) : null,
         User.fromMap(map['author']),
         map['member'],
         map['content'],
@@ -115,10 +142,12 @@ class Message {
         map['pinned'],
         map['webhookId'] != null ? int.tryParse(map['webhookId']) : null,
         map['type'],
-        map['flags']);
+        map['flags'],
+        client);
   }
 
   String toJson() => json.encode(toMap());
 
-  static Message fromJson(String source) => fromMap(json.decode(source));
+  static Message fromJson(String source, Client client) =>
+      fromMap(json.decode(source), client);
 }

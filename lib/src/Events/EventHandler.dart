@@ -2,6 +2,7 @@ part of dartcord;
 
 abstract class EventHandler {
   final StreamController _streamController = StreamController.broadcast();
+
   StreamController get streamController => _streamController;
 
   Stream<T> on<T>() {

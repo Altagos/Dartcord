@@ -39,3 +39,28 @@ class Console {
   static const ANSI_CYAN_BACKGROUND = '\u001B[46m';
   static const ANSI_WHITE_BACKGROUND = '\u001B[47m';
 }
+
+class Colors {
+  static const aqua = 1752220;
+  static const green = 3066993;
+  static const blue = 3447003;
+  static const purple = 10181046;
+  static const gold = 15844367;
+  static const orange = 15105570;
+  static const red = 15158332;
+  static const grey = 9807270;
+  static const darkerGrey = 8359053;
+  static const navy = 3426654;
+  static const darkAqua = 1146986;
+  static const darkGreen = 2067276;
+  static const darkBlue = 2123412;
+  static const darkPurple = 7419530;
+  static const darkGold = 12745742;
+  static const darkOrange = 11027200;
+  static const darkRed = 10038562;
+  static const darkGrey = 9936031;
+  static const lightGrey = 12370112;
+  static const darkNavy = 2899536;
+  static const luminousVividPink = 16580705;
+  static const darkVividPink = 12320855;
+}

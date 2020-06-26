@@ -16,17 +16,29 @@ class User {
   final int _publicFlags;
 
   int get id => _id;
+
   String get username => _username;
+
   String get discriminator => _discriminator;
+
   String get avatar => _avatar;
+
   bool get bot => _bot;
+
   bool get system => _system;
+
   bool get mfaEnabled => _mfaEnabled;
+
   String get local => _local;
+
   bool get verified => _verified;
+
   String get email => _email;
+
   int get flags => _flags;
+
   int get premiumType => _premiumType;
+
   int get publicFlags => _publicFlags;
 
   User(
