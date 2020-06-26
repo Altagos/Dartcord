@@ -11,6 +11,14 @@ class Commander extends Client {
         var message = event.message.content.split(' ');
         var command = message[0].substring(_prefix.length);
         print(command);
+        _commandLoader.commands.forEach((key, value) {
+          value.forEach((key, value) {
+            if (command != key || !value.aliases.contains(command)) {
+              return super.on<MessageCreateEvent>();
+            }
+            print('Yes');
+          });
+        });
       } else {
         return super.on<MessageCreateEvent>();
       }
@@ -33,5 +41,9 @@ class Commander extends Client {
       });
     }
     return super.on<T>();
+  }
+
+  void loadCommands() {
+    // TODO: dynamically fetch commands and command groups
   }
 }

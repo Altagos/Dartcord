@@ -9,4 +9,6 @@ class CommandLoader {
   void add(String groupName, Command command) {
     _commands[groupName][command.name] = command;
   }
+
+  Map<String, Map<String, Command>> get commands => _commands;
 }
