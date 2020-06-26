@@ -8,7 +8,6 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
-import 'package:quiver/cache.dart';
 import 'package:web_socket_channel/io.dart';
 
 part 'src/Client/Client.dart';
