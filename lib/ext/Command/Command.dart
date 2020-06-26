@@ -8,7 +8,7 @@ class Command {
    List<String> _aliases;
    bool _hidden;
 
-  Command({String name, String description, List<String> aliases, bool hidden, Function function}) {
+  Command(String name, String description, List<String> aliases, bool hidden, {Function function}) {
     _name = name;
     _description = description;
     _aliases = aliases;
