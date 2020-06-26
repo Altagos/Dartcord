@@ -1,14 +1,18 @@
 part of datcord_ext_command;
 
 class Command {
-  final String _name;
+   String _name;
   Function _function;
   bool _disabled = false;
-  final String _description;
-  final List<String> aliases;
-  final bool hidden;
+   String _description;
+   List<String> _aliases;
+   bool _hidden;
 
-  Command(this._name, this._description, this.aliases, this.hidden, {Function function}) {
+  Command({String name, String description, List<String> aliases, bool hidden, Function function}) {
+    _name = name;
+    _description = description;
+    _aliases = aliases;
+    _hidden = hidden;
     _function = function;
   }
 
